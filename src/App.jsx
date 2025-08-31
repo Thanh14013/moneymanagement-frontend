@@ -15,6 +15,7 @@ const App = () => {
       <Toaster />
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -22,7 +23,6 @@ const App = () => {
           <Route path="/income" element={<Income />} />
           <Route path="/filter" element={<Filter />} />
           <Route path="/expense" element={<Expense />} />
-
         </Routes>
       </BrowserRouter>
     </>
