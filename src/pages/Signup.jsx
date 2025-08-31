@@ -1,8 +1,148 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { assets } from '../assets/assets';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Kiểm tra Full Name
+    if (!fullName.trim()) {
+      newErrors.fullName = 'Full Name is required';
+    } else if (fullName.trim().length < 2) {
+      newErrors.fullName = 'Full Name must be at least 2 characters';
+    }
+
+    // Kiểm tra Email
+    if (!email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+    // Kiểm tra Password
+    if (!password.trim()) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const formErrors = validateForm();
+    
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      setError('Please fix all errors before submitting');
+      return;
+    }
+
+    // Clear errors if validation passes
+    setErrors({});
+    setError(null);
+    
+    // Add signup logic here
+    console.log('Signup:', { fullName, email, password });
+    
+    // Navigate to login after successful signup
+    navigate('/login');
+  };
+
+  const navigate = useNavigate();
+
   return (
-    <div>Signup</div>
+    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden" style={{ margin: 0, padding: 0 }}>
+      {/* Background Image */}
+      <img
+        src={assets.login_bg}
+        alt="Background"
+        className="absolute inset-0 w-full h-full object-cover filter blur-sm pointer-events-none select-none"
+        style={{ objectFit: 'cover' }}
+      />
+      <div class="flex items-center justify-center backdrop-blur-sm ">
+        <div class="w-full max-w-md p-8 mx-auto bg-white rounded-lg shadow-lg">
+          <h1 class="text-2xl font-bold text-center text-gray-800">Create An Account</h1>
+          <p class="mt-2 text-center text-gray-600">Start tracking your spendings by joining with us.</p>
+          
+          {/* Display general error */}
+          {error && (
+            <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit} class="mt-8 space-y-6">
+            <div>
+              <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+              <input 
+                onChange={(e) => setFullName(e.target.value)} 
+                value={fullName} 
+                type="text" 
+                id="fullName" 
+                placeholder="Jhon Doe" 
+                class={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 ${errors.fullName ? 'border-red-500' : 'border-gray-300'}`}
+                required 
+              />
+              {errors.fullName && (
+                <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>
+              )}
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+              <input 
+                onChange={(e) => setEmail(e.target.value)} 
+                value={email} 
+                type="email" 
+                id="email" 
+                placeholder="name@example.com" 
+                class={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                required 
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
+            </div>
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+              <input 
+                onChange={(e) => setPassword(e.target.value)} 
+                value={password} 
+                type="password" 
+                id="password" 
+                placeholder="********" 
+                class={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                required 
+              />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+              )}
+            </div>
+            <button 
+              type="submit" 
+              class="w-full py-3 px-4 bg-gradient-to-r from-purple-700 to-purple-500 text-white text-sm font-bold uppercase rounded-md shadow hover:from-purple-800 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+            >
+              SIGN UP
+            </button>
+          </form>
+          <p class="mt-6 text-center text-sm text-gray-600">
+            Already have an account?
+            <Link to="/login" class="font-medium text-purple-600 hover:text-purple-500 hover:underline">Login</Link>
+          </p>
+        </div>
+      </div>
+
+    </div>
   )
 }
 
