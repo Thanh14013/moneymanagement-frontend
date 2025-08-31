@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { assets } from '../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
+import axiosConfig from '../util/AxiosConfig';
+import toast from 'react-hot-toast';
+import { API_ENDPONT } from '../util/apiEnpoint';
+import { LoaderCircle } from 'lucide-react';
 
 const Signup = () => {
 
@@ -9,6 +13,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -37,8 +42,13 @@ const Signup = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Ngăn reload trang khi đang loading
+    if (isLoading) {
+      return;
+    }
     
     const formErrors = validateForm();
     
@@ -52,11 +62,25 @@ const Signup = () => {
     setErrors({});
     setError(null);
     
-    // Add signup logic here
-    console.log('Signup:', { fullName, email, password });
+    // Bắt đầu loading
+    setIsLoading(true);
     
-    // Navigate to login after successful signup
-    navigate('/login');
+    // Add signup logic here
+    try {
+      const response = await axiosConfig.post(API_ENDPONT.REGISTER, { fullName, email, password });
+      if (response.status === 201) {
+        console.log('Signup successful:', response.data);
+        toast.success('Signup successful!');
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Signup failed:', error);
+      toast.error('Signup failed. Please try again.');
+      setError('Signup failed. Please try again.');
+    } finally {
+      // Kết thúc loading
+      setIsLoading(false);
+    }
   };
 
   const navigate = useNavigate();
@@ -70,7 +94,7 @@ const Signup = () => {
         className="absolute inset-0 w-full h-full object-cover filter blur-sm pointer-events-none select-none"
         style={{ objectFit: 'cover' }}
       />
-      <div class="flex items-center justify-center backdrop-blur-sm ">
+      <div class="flex items-center justify-center backdrop-blur-sm w-[500px]">
         <div class="w-full max-w-md p-8 mx-auto bg-white rounded-lg shadow-lg">
           <h1 class="text-2xl font-bold text-center text-gray-800">Create An Account</h1>
           <p class="mt-2 text-center text-gray-600">Start tracking your spendings by joining with us.</p>
@@ -130,9 +154,19 @@ const Signup = () => {
             </div>
             <button 
               type="submit" 
-              class="w-full py-3 px-4 bg-gradient-to-r from-purple-700 to-purple-500 text-white text-sm font-bold uppercase rounded-md shadow hover:from-purple-800 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              disabled={isLoading}
+              class={`w-full py-3 px-4 text-white text-sm font-bold uppercase rounded-md shadow focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
+                isLoading 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-gradient-to-r from-purple-700 to-purple-500 hover:from-purple-800 hover:to-purple-600'
+              }`}
             >
-              SIGN UP
+              {isLoading ? (
+                <>
+                  <LoaderCircle className="animate-spin h-5 w-5 text-white" />
+                  SIGNING UP...
+                </>
+              ) : 'SIGN UP'}
             </button>
           </form>
           <p class="mt-6 text-center text-sm text-gray-600">
