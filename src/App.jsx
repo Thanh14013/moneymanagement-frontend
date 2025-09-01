@@ -30,7 +30,7 @@ const App = () => {
 }
 
 const Root = () => {
-  const isAuth = !!localStorage.getItem("token");
+  const isAuth = localStorage.getItem("token");
   return isAuth ? (
     <Navigate to="/dashboard" />
   ) : (
