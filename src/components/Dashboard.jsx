@@ -1,23 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Menubar from './Menubar'
-import { AppContext } from '../context/AppContext'
+import Sidebar from './Sidebar';
 
-const Dashboard = () => {
+const Dashboard = ({ children, activeMenu }) => {
 
-  const { user } = useContext(AppContext);
 
   return (
-    <div>
-      <Menubar />
-
-      {user && (
-        <div className="flex">
-          <div className="max-[1080px]:hidden">
-            <div>Sidebar content</div>
+    <div className="min-h-screen bg-gray-50">
+      <Menubar activeMenu={activeMenu} />
+        <div className="flex flex-col lg:flex-row">
+          {/* Desktop Sidebar - ẩn trên mobile và tablet */}
+          <div className="hidden lg:block lg:w-64 flex-shrink-0">
+            <Sidebar activeMenu={activeMenu}/>
           </div>
-          <div className="grow mx-5">Right side content</div>
+          <div className="grow mx-5">{children}</div>
         </div>
-      )}
+      
 
     </div>
   )

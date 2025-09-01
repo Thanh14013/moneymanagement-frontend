@@ -1,7 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import "tailwindcss";
 
-body {
+* {
+  box-sizing: border-box;
+}
+
+html, body {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -12,6 +16,22 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #e9f2f0ff;
   overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* Mobile responsive utilities */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Ensure mobile sidebar doesn't cause horizontal scroll */
+@media (max-width: 1024px) {
+  body {
+    overflow-x: hidden;
+  }
 }
 
 /* #root {

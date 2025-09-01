@@ -4,7 +4,9 @@ import Dashboard from '../components/Dashboard'
 const Home = () => {
   return (
     <div>
-      <Dashboard />
+      <Dashboard activeMenu="Dashboard" >
+        this is home pages
+      </Dashboard>
     </div>
   )
 }
