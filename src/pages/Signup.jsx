@@ -5,6 +5,8 @@ import axiosConfig from '../util/AxiosConfig';
 import toast from 'react-hot-toast';
 import { API_ENDPONT } from '../util/apiEnpoint';
 import { LoaderCircle } from 'lucide-react';
+import ProfilePhotoSelector from '../components/ProfilePhotoSelector';
+import uploadProfileImage from '../util/uploadProfileImage';
 
 const Signup = () => {
 
@@ -14,6 +16,7 @@ const Signup = () => {
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [image, setImage] = useState(null);
 
   const validateForm = () => {
     const newErrors = {};
@@ -45,6 +48,8 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    let profileImageUrl = "";
+
     // Ngăn reload trang khi đang loading
     if (isLoading) {
       return;
@@ -67,7 +72,13 @@ const Signup = () => {
     
     // Add signup logic here
     try {
-      const response = await axiosConfig.post(API_ENDPONT.REGISTER, { fullName, email, password });
+
+      if(image){
+        const imageUrl= await uploadProfileImage(image);
+        profileImageUrl = imageUrl || "";
+      }
+
+      const response = await axiosConfig.post(API_ENDPONT.REGISTER, { fullName, email, password, profileImageUrl });
       if (response.status === 201) {
         console.log('Signup successful:', response.data);
         toast.success('Signup successful!');
@@ -105,7 +116,9 @@ const Signup = () => {
               {error}
             </div>
           )}
-          
+
+          <ProfilePhotoSelector image={image} setImage={setImage} />
+
           <form onSubmit={handleSubmit} class="mt-8 space-y-6">
             <div>
               <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>

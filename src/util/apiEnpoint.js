@@ -1,6 +1,7 @@
 export const BASE_URL = "http://localhost:8080/api/v1.0";
-
+const CLOUDINARY_NAME = "dc4jg3br6"
 export const API_ENDPONT ={
     LOGIN: "/login",
-    REGISTER: "/register"
+    REGISTER: "/register",
+    UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`
 }
