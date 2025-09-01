@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -15,7 +15,7 @@ const App = () => {
       <Toaster />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Root />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -26,6 +26,15 @@ const App = () => {
         </Routes>
       </BrowserRouter>
     </>
+  )
+}
+
+const Root = () => {
+  const isAuth = !!localStorage.getItem("token");
+  return isAuth ? (
+    <Navigate to="/dashboard" />
+  ) : (
+    <Navigate to="/login" />
   )
 }
 

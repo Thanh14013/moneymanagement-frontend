@@ -1,11 +1,15 @@
 import React from 'react'
-import Dashboard
- from '../components/Dashboard'
+import Dashboard from '../components/Dashboard'
+import { useUser } from '../hook/useUser'
+
 const Income = () => {
+  useUser();
   return (
-    <Dashboard activeMenu="Income">
-      this is income pages
-    </Dashboard>
+    <div>
+      <Dashboard activeMenu="Income">
+        this is income pages
+      </Dashboard>
+    </div>
   )
 }
 

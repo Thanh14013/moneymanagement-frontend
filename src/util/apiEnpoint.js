@@ -4,5 +4,6 @@ export const API_ENDPONT ={
     LOGIN: "/login",
     REGISTER: "/register",
     GET_USER_INFO: "/profile",
+    GET_ALL_CATEGORIES: "/categories",
     UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`
 }
