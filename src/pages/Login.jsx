@@ -62,7 +62,6 @@ const Login = () => {
     try {
       const response = await axiosConfig.post(API_ENDPONT.LOGIN, { email, password });
       if (response.status === 200 || response.status === 201) {
-        console.log('Login successful:', response.data);
         toast.success('Login successful!');
         const {token, user} = response.data;
         if (token){

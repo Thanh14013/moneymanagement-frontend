@@ -31,7 +31,6 @@ const Income = () => {
       const respond = await axiosConfig.get(API_ENDPONT.GET_ALL_INCOMES);
       if (respond.data) {
         setIncomeData(respond.data);
-        console.log(respond.data);
       }
     } catch (error) {
       console.error("Error fetching income details:", error);
@@ -46,12 +45,50 @@ const Income = () => {
       const respond = await axiosConfig.get(API_ENDPONT.CATEGORY_BY_TYPE("income"))
       if (respond.data) {
         setCategories(respond.data);
-        console.log("Income Categories:", respond.data);
-        console.log(respond.data);
       }
     } catch (error) {
       console.error("Error fetching income categories:", error);
       toast.error("Failed to fetch income categories");
+    }
+  }
+
+  const handleAddIncome = async (income) => {
+    const { name, amount, date, icon, categoryId } = income;
+
+    //validation
+    if (!name || !amount || !date || !icon || !categoryId || isNaN(amount) || Number(amount) <= 0) {
+      toast.error("Error, Try again");
+      return;
+    }
+
+    try {
+      const response = await axiosConfig.post(API_ENDPONT.ADD_INCOME, {
+        name,
+        amount: Number(amount),
+        date,
+        icon,
+        categoryId
+      });
+      if (response.data) {
+        setOpenAddIncomeModal(false);
+        fetchIncomeDetails();
+        fetchIncomeCategories();
+        toast.success("Income added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding income:", error);
+      toast.error("Failed to add income");
+    }
+  }
+
+  const deleteIncome = async (id) => {
+    try {
+      await axiosConfig.delete(API_ENDPONT.DELETE_INCOME(id));
+      fetchIncomeDetails();
+      toast.success("Income deleted successfully");
+    } catch (error) {
+      console.error("Error deleting income:", error);
+      toast.error("Failed to delete income");
     }
   }
 
@@ -71,14 +108,14 @@ const Income = () => {
                 <Plus size={15} className="text-lg" /> Add Income
               </button>
               <br />
-              <IncomeList transactions={incomeData} onDelete={(id) => console.log(id)} />
+              <IncomeList transactions={incomeData} onDelete={(id) => deleteIncome(id)} />
 
               <Modal
                 isOpen={openAddIncomeModal}
                 onClose={() => setOpenAddIncomeModal(false)}
                 title="Add Income"
               >
-                <AddIncomeForm onAddIncome={() => console.log("Income added")} categories={categories} />
+                <AddIncomeForm onAddIncome={(income) => handleAddIncome(income)} categories={categories} />
               </Modal>
 
             </div>

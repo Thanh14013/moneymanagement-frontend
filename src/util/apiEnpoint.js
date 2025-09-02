@@ -8,6 +8,8 @@ export const API_ENDPONT ={
     ADD_CATEGORY: "/categories",
     UPDATE_CATEGORY: (categoryId) => `/categories/${categoryId}`,
     CATEGORY_BY_TYPE: (type) => `/categories/${type}`,
+    ADD_INCOME: "/incomes",
+    DELETE_INCOME: (incomeId) => `/incomes/${incomeId}`,
     GET_ALL_INCOMES: "/incomes",
     UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`
 }

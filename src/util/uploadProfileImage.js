@@ -19,7 +19,6 @@ const uploadProfileImage = async (image) => {
     }
 
     const data = await response.json();
-    console.log("Image uploaded successfully:", data);
     return data.secure_url;
   } catch (e) {
     console.error("Upload error:", e);

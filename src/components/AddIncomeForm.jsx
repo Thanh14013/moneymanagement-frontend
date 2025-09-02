@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Input from './Input'
 import EmojiPickerPopup from './EmojiPickerPopup'
+import { LoaderCircle } from 'lucide-react'
 
 const AddIncomeForm = ({ onAddIncome, categories }) => {
     const [income, setIncome] = useState({
@@ -10,7 +11,7 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
         icon: '',
         categoryId: ''
     })
-
+    const [loading, setLoading] = useState(false);
     const categoryOptions = categories.map(category => ({
         value: category.id,
         label: category.name
@@ -19,6 +20,31 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
     const handleChange = (key, value) => {
         setIncome({ ...income, [key]: value });
     }
+
+    const handleAddIncome = async () => {
+        setLoading(true);
+        try {
+            await onAddIncome(income);
+            setIncome({
+                name: '',
+                amount: '',
+                date: '',
+                icon: '',
+                categoryId: ''
+            });
+        } catch (error) {
+            console.error("Error adding income:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        if (categories.length > 0 && !income.categoryId) {
+            setIncome((prev) => ({ ...prev, categoryId: categories[0].id }))
+        }
+    }, [categories, income.categoryId]);
+
 
     return (
         <div>
@@ -59,10 +85,16 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
 
             <div className="flex justify-end mt-6">
                 <button
-                    onClick={() => onAddIncome(income)}
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                    onClick={handleAddIncome}
+                    disabled={loading}
+                    className="flex item-center gap-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                 >
-                    Add Income
+                    {loading ? (
+                        <>
+                            <LoaderCircle className='w-4 h-4 animate-spin' />
+                            Adding
+                        </>
+                    ) : <><span>Add Income</span></>}
                 </button>
             </div>
 

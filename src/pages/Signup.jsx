@@ -80,7 +80,6 @@ const Signup = () => {
 
       const response = await axiosConfig.post(API_ENDPONT.REGISTER, { fullName, email, password, profileImageUrl });
       if (response.status === 201) {
-        console.log('Signup successful:', response.data);
         toast.success('Signup successful!');
         navigate('/login');
       }
