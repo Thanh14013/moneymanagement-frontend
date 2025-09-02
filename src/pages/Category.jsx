@@ -73,7 +73,38 @@ const Category = () => {
   }
 
   const handleEditCategory = (category) => {
-    console.log("Edit category clicked", category);
+    setOpenEditCategoryModal(true);
+    setSelectedCategory(category);
+  }
+
+  const handleUpdateCategory = async (category) => {
+    const {id, name, type, icon} = category;
+    if(!name.trim()){
+      toast.error("Category name is required");
+      return;
+    }
+    if (!id) {
+      toast.error("Invalid category ID");
+      return;
+    }
+    try {
+      const respond = await axiosConfig.put(API_ENDPONT.UPDATE_CATEGORY(id), {
+        name,
+        type,
+        icon
+      });
+      if (respond.data) {
+        toast.success("Category updated successfully");
+        setOpenEditCategoryModal(false);
+        setSelectedCategory(null);
+        fetchCategoryDetails();
+      }
+      else if (respond.status === 400 || respond.status === 403 || respond.status === 500)
+        toast.error("Failed to update category");
+    } catch (error) {
+      console.error("Error updating category:", error);
+      toast.error("Failed to update category");
+    }
   }
 
   return (
@@ -98,6 +129,9 @@ const Category = () => {
             <AddCategoryForm onAddCategory={handleAddCategory} />
           </Modal>
         {/* updating category modal */}
+        <Modal isOpen={openEditCategoryModal} onClose={() => {setOpenEditCategoryModal(false); setSelectedCategory(null)}} title="Update Category">
+            <AddCategoryForm initialCategoryData={selectedCategory} isEditing={true} onAddCategory={handleUpdateCategory} />
+          </Modal>
       </div>
     </Dashboard>
   )
