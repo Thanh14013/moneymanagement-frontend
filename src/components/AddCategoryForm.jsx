@@ -58,13 +58,15 @@ const AddCategoryForm = ({ onAddCategory, initialCategoryData, isEditing }) => {
                 type="text"
             />
 
-            <Input
+            {!isEditing && (
+                <Input
                 value={category.type}
                 onChange={({ target }) => handleChange({ key: "type", value: target.value })}
                 label="Category Type"
                 options={categoryTypeOptions}
                 isSelect={true}
             />
+            )}
 
             <div className="flex justify-end mt-6">
                 <button
