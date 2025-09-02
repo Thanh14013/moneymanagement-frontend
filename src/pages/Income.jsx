@@ -8,6 +8,7 @@ import IncomeList from '../components/IncomeList';
 import Modal from '../components/Modal';
 import { Plus } from 'lucide-react';
 import AddIncomeForm from '../components/AddIncomeForm';
+import IncomeOverview from '../components/IncomeOverview';
 
 const Income = () => {
   useUser();
@@ -17,10 +18,7 @@ const Income = () => {
   const [loading, setLoading] = useState(false);
 
   const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false);
-  const [openDeleteAlert, setOpenDeleteAlert] = useState({
-    show: false,
-    data: null,
-  });
+
 
   const fetchIncomeDetails = async () => {
     if (loading) return;
@@ -107,6 +105,7 @@ const Income = () => {
               <button className="flex items-center gap-1 bg-green-400 text-white px-4 py-2 rounded-lg hover:bg-green-600" onClick={() => setOpenAddIncomeModal(true)}>
                 <Plus size={15} className="text-lg" /> Add Income
               </button>
+              <IncomeOverview transactions={incomeData}/>
               <br />
               <IncomeList transactions={incomeData} onDelete={(id) => deleteIncome(id)} />
 
