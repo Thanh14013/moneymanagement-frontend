@@ -48,6 +48,11 @@ const Category = () => {
       toast.error("Category name is required");
       return;
     }
+    //check if category already exists
+    if (categoryData.some((cat) => cat.name === name)) {
+      toast.error("Category already exists");
+      return;
+    }
     try {
       const response = await axiosConfig.post(API_ENDPONT.ADD_CATEGORY, {
         name,
@@ -59,10 +64,16 @@ const Category = () => {
         setOpenAddCategoryModal(false);
         fetchCategoryDetails();
       }
+      else if (response.status === 400 || response.status === 403 || response.status === 500)
+        toast.error("Failed to add category");
     } catch (error) {
       console.error("Error adding category:", error);
       toast.error("Failed to add category");
     }
+  }
+
+  const handleEditCategory = (category) => {
+    console.log("Edit category clicked", category);
   }
 
   return (
@@ -80,7 +91,7 @@ const Category = () => {
 
 
         {/* category list */}
-        <CategoryList categories={categoryData} />
+        <CategoryList categories={categoryData} onEditCategory={handleEditCategory} />
 
         {/* adding category modal */}
           <Modal isOpen={openAddCategoryModal} onClose={() => setOpenAddCategoryModal(false)} title="Add Category">
