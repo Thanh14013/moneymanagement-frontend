@@ -27,7 +27,7 @@ const CustomAmount = ({ data }) => {
           </div>
           <div className="space-y-1">
             <div className="text-lg font-bold text-purple-700">
-              Total: ${data.totalAmount.toLocaleString()}
+              Total: {data.totalAmount.toLocaleString()}đ
             </div>
             {/* Always show Details section if we have data */}
             <div className="text-sm text-gray-600">
@@ -37,7 +37,7 @@ const CustomAmount = ({ data }) => {
             {categoryDetails.length > 0 ? (
               categoryDetails.map((category, index) => (
                 <div key={index} className="text-sm text-gray-600">
-                  {category.name}: ${category.amount.toLocaleString()}
+                  {category.name}: {category.amount.toLocaleString()}đ
                 </div>
               ))
             ) : (
@@ -103,9 +103,9 @@ const CustomAmount = ({ data }) => {
             tickFormatter={(value) => {
               // Improve tick formatting based on value magnitude
               if (value >= 1000) {
-                return `$${Math.round(value / 1000)}k`;
+                return `${Math.round(value / 1000)}k`;
               } else {
-                return `$${value}`;
+                return `${value}`;
               }
             }}
             // Ensure we show enough ticks for small amounts

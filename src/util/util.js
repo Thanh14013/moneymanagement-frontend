@@ -6,15 +6,9 @@ export const addThousandsSeparator = (num) => {
   let integerPart = parts[0];
   let fractionalPart = parts[1];
 
-  const lastThree = integerPart.substring(integerPart.length - 3);
-  const otherNumbers = integerPart.substring(0, integerPart.length - 3);
-
-  if (otherNumbers !== '') {
-    const formattedOtherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-    integerPart = formattedOtherNumbers + ',' + lastThree;
-  } else {
-    integerPart = lastThree;
-  }
-
-  return fractionalPart ? `${integerPart}.${fractionalPart}` : integerPart;
+  // Format with dots as thousands separators (Vietnamese style)
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  
+  // Add the Vietnamese đồng symbol
+  return fractionalPart ? `${integerPart},${fractionalPart}đ` : `${integerPart}đ`;
 }

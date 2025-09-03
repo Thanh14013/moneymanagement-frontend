@@ -16,7 +16,7 @@ const Transactions = ({transactions, onMore, type, title}) => {
         {transactions?.slice(0, 5)?.map((item) => (
             <TransactionInfoCard 
                 key={item.id}
-                title={item.title}
+                title={item.name}
                 amount={item.amount}
                 date={moment(item.date).format("MMM D, YYYY")}
                 icon={item.icon}
