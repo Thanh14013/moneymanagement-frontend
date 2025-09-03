@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import axiosConfig from '../util/AxiosConfig';
 import { API_ENDPONT } from '../util/apiEnpoint';
 import RecentTransaction from '../components/RecentTransaction';
+import FinanceOverview from '../components/FinanceOverview';
+import Transactions from '../components/Transactions';
 
 const Home = () => {
   useUser();
@@ -64,7 +66,7 @@ const Home = () => {
             />
 
           </div>
-          <div className="grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-6 mt-6">
             {/* Recent transactions */}
             <RecentTransaction
               Transactions={dashboardData?.recentTransactions}
@@ -72,13 +74,27 @@ const Home = () => {
             />
 
             {/* finance overview chart */}
-
+              <FinanceOverview 
+                totalBalance={dashboardData?.totalBalance}
+                totalIncome={dashboardData?.totalIncomes}
+                totalExpense={dashboardData?.totalExpenses}
+              />
 
             {/* Expense transactions */}
-
+              <Transactions
+                transactions={dashboardData?.recent5Expenses}
+                onMore={() => navigate('/expense')}
+                type="expense"
+                title="Recent Expense Transactions"
+              />
 
             {/* Income transactions */}
-
+              <Transactions
+                transactions={dashboardData?.recent5Incomes}
+                onMore={() => navigate('/income')}
+                type="income"
+                title="Recent Income Transactions"
+              />
 
           </div>
         </div>

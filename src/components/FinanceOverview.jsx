@@ -1,9 +1,10 @@
 import React from 'react'
 import { addThousandsSeparator } from '../util/util';
+import CustomPieChart from './CustomPieChart';
 
-const FinanceOverview = (totalBalance, totalIncome,totalExpense) => {
+const FinanceOverview = ({ totalBalance, totalIncome, totalExpense }) => {
   
-  const COLORS = ["#59168B, #a0090e", "#016630"];
+  const COLORS = ["#59168B", "#016630" , "#a0090e"];
 
   const balanceData = [
     {name: "Total Balance", amount: totalBalance},
@@ -12,10 +13,10 @@ const FinanceOverview = (totalBalance, totalIncome,totalExpense) => {
   ]
 
   return (
-    <div>
-        <div className="bg-white shadow-md rounded-xl p-4">
-          <div className="flex justify-between items-center ">
-            <h5 className="text-lg">Financial Overview</h5>
+    <div className='w-full h-full'>
+        <div className="p-4 bg-white rounded-2xl shadow-md shadow-gray-100 border border-gray-200/50 h-full flex flex-col">
+          <div className="flex justify-between items-center">
+            <h4 className="text-lg">Financial Overview</h4>
           </div>
 
           <CustomPieChart 
