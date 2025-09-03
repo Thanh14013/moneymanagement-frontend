@@ -7,6 +7,19 @@ const CustomAmount = ({ data }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       
+      // Extract category details directly from categoryDetails or categories
+      let categoryDetails = [];
+      
+      if (data.categoryDetails && typeof data.categoryDetails === 'object') {
+        // Convert from object to array format
+        categoryDetails = Object.entries(data.categoryDetails).map(([name, amount]) => ({
+          name,
+          amount
+        }));
+      } else if (Array.isArray(data.categories)) {
+        categoryDetails = data.categories;
+      }
+      
       return (
         <div className="bg-white p-3 rounded-lg shadow-lg">
           <div className="text-sm font-medium text-gray-800 mb-1">
@@ -16,17 +29,22 @@ const CustomAmount = ({ data }) => {
             <div className="text-lg font-bold text-purple-700">
               Total: ${data.totalAmount.toLocaleString()}
             </div>
-            {data.categories && data.categories.length > 0 && (
-              <>
-                <div className="text-sm text-gray-600">
-                  Details:
+            {/* Always show Details section if we have data */}
+            <div className="text-sm text-gray-600">
+              Details:
+            </div>
+            {/* Show all category details */}
+            {categoryDetails.length > 0 ? (
+              categoryDetails.map((category, index) => (
+                <div key={index} className="text-sm text-gray-600">
+                  {category.name}: ${category.amount.toLocaleString()}
                 </div>
-                {data.categories.map((category, index) => (
-                  <div key={index} className="text-sm text-gray-600">
-                    {category.name}: ${category.amount.toLocaleString()}
-                  </div>
-                ))}
-              </>
+              ))
+            ) : (
+              // Fallback if no categories
+              <div className="text-sm text-gray-600 italic">
+                No detailed breakdown available
+              </div>
             )}
           </div>
         </div>
@@ -82,7 +100,18 @@ const CustomAmount = ({ data }) => {
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: '#6b7280' }}
-            tickFormatter={(value) => `$${Math.round(value / 1000)}k`}
+            tickFormatter={(value) => {
+              // Improve tick formatting based on value magnitude
+              if (value >= 1000) {
+                return `$${Math.round(value / 1000)}k`;
+              } else {
+                return `$${value}`;
+              }
+            }}
+            // Ensure we show enough ticks for small amounts
+            tickCount={5}
+            // Allow the chart to determine reasonable min/max values
+            domain={['auto', 'auto']}
           />
           
           <Tooltip 

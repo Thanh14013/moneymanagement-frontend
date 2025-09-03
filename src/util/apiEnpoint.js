@@ -11,5 +11,8 @@ export const API_ENDPONT ={
     ADD_INCOME: "/incomes",
     DELETE_INCOME: (incomeId) => `/incomes/${incomeId}`,
     GET_ALL_INCOMES: "/incomes",
+    ADD_EXPENSE: "/expenses",
+    DELETE_EXPENSE: (expenseId) => `/expenses/${expenseId}`,
+    GET_ALL_EXPENSES: "/expenses",
     UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`
 }

@@ -5,7 +5,7 @@ import CustomAmount from './CustomAmount';
 import axiosConfig from '../util/AxiosConfig';
 import { API_ENDPONT } from '../util/apiEnpoint';
 
-const IncomeOverview = ({ transactions }) => {
+const ExpenseOverview = ({ transactions }) => {
 
     const [chartData, setChartData] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -56,7 +56,7 @@ const IncomeOverview = ({ transactions }) => {
             else if (tx.categoryName) {
                 categoryName = tx.categoryName;
             }
-            // Last resort, use the income name itself
+            // Last resort, use the expense name itself
             else if (tx.name) {
                 categoryName = tx.name;
             }
@@ -91,7 +91,7 @@ const IncomeOverview = ({ transactions }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axiosConfig.get(API_ENDPONT.CATEGORY_BY_TYPE("income"));
+                const response = await axiosConfig.get(API_ENDPONT.CATEGORY_BY_TYPE("expense"));
                 if (response.data) {
                     setCategories(response.data);
                 }
@@ -110,16 +110,16 @@ const IncomeOverview = ({ transactions }) => {
         }
         
         // Log the transactions and categories for debugging
-        console.log("Income transactions:", transactions);
-        console.log("Available income categories:", categories);
+        console.log("Expense transactions:", transactions);
+        console.log("Available expense categories:", categories);
         
         // Log the first transaction to understand its structure
         if (transactions.length > 0) {
-            console.log("First income transaction structure:", transactions[0]);
+            console.log("First expense transaction structure:", transactions[0]);
         }
         
         const formattedData = processTransactionData(transactions, categories);
-        console.log("Formatted income chart data:", formattedData);
+        console.log("Formatted expense chart data:", formattedData);
         
         // Make sure each item in formattedData has categories array
         const enhancedData = formattedData.map(item => {
@@ -139,7 +139,7 @@ const IncomeOverview = ({ transactions }) => {
             return item;
         });
         
-        console.log("Enhanced income chart data:", enhancedData);
+        console.log("Enhanced expense chart data:", enhancedData);
         setChartData(enhancedData);
     }, [transactions, categories, processTransactionData]);
 
@@ -148,16 +148,16 @@ const IncomeOverview = ({ transactions }) => {
             <div className="flex items-center justify-between">
                 <div>
                     <h5 className="text-lg">
-                        Income Overview
+                        Expense Overview
                     </h5>
                     <p className="text-xs text-gray-400 mt-0 5">
-                        Track your earnings over time and analyze your income trends.
+                        Track your spending over time and analyze your expense trends.
                     </p>
                 </div>
             </div>
 
             <div className="mt-10">
-                {/* Chart for income overview */}
+                {/* Chart for expense overview */}
                 <CustomAmount data={chartData} />
             </div>
         </div>
@@ -165,4 +165,4 @@ const IncomeOverview = ({ transactions }) => {
     )
 }
 
-export default IncomeOverview
+export default ExpenseOverview
